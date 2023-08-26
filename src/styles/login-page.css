@@ -28,6 +28,7 @@
 
 body {
   background-color: whitesmoke;
+  margin: 0;
 }
 
 .login-form {
@@ -52,6 +53,10 @@ body {
   width: 100%;
   border-radius: 5px;
   border: 2px solid var(--main-accent);
+}
+
+.login-form input {
+  width: 92%;
 }
 
 .login-form label {

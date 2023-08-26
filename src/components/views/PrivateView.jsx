@@ -4,7 +4,7 @@ import MemberPage from "../member-pages/MemberPage";
 import OfficerPage from "../member-pages/OfficerPage";
 import "../../styles/member-view.css";
 
-const PrivateView = ({ switchView }) => {
+const PrivateView = () => {
   const [member, setMember] = useState({
     memberId: "",
     role: "",
@@ -23,9 +23,7 @@ const PrivateView = ({ switchView }) => {
 
   return (
     <div style={{ height: "100%" }}>
-      <button id="home-portal-button" onClick={switchView}>
-        Home Page
-      </button>
+      <button id="home-portal-button">Home Page</button>
       {renderPage()}
     </div>
   );
