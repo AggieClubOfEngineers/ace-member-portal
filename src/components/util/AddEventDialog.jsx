@@ -14,14 +14,7 @@ import "react-datetime/css/react-datetime.css";
 import { Timestamp } from "firebase/firestore";
 import moment from "moment";
 
-const pointTypes = [
-  "Social",
-  "Service",
-  "Family",
-  "Committee",
-  "Meeting",
-  "Other",
-];
+const pointTypes = ["Social", "Service", "Family", "Committee", "Meeting"];
 
 const AddEventDialog = ({ open, handleClose, handleAddEvent }) => {
   const [name, setName] = useState("");

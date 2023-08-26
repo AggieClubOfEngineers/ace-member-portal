@@ -1,12 +1,5 @@
 import React, { useContext } from "react";
-const pointCategories = [
-  "Social",
-  "Service",
-  "Family",
-  "Committee",
-  "Meeting",
-  "Other",
-];
+const pointCategories = ["Social", "Service", "Family", "Committee", "Meeting"];
 
 import MemberContext from "../util/MemberContext";
 import "../../styles/points-tab.css";

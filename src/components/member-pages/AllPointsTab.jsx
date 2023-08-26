@@ -9,19 +9,12 @@ import {
   TableRow,
   TextField,
 } from "@material-ui/core";
-import "../../styles/points-tab.css";
+// import "../../styles/points-tab.css";
 import { updateEvents } from "../../firebase";
 
 import PointsSummary from "../util/PointsSummary";
 
-const pointCategories = [
-  "Social",
-  "Service",
-  "Family",
-  "Committee",
-  "Meeting",
-  "Other",
-];
+const pointCategories = ["Social", "Service", "Family", "Committee", "Meeting"];
 
 const AllPointsTab = () => {
   const { data, updateData } = useContext(MemberContext);
@@ -153,7 +146,9 @@ const AllPointsTab = () => {
           </div>
         );
       })}
-      <button onClick={handleSave}>Save</button>
+      <button className="save-button" onClick={handleSave}>
+        Save
+      </button>
     </div>
   );
 };

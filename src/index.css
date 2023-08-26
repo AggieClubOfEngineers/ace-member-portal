@@ -259,3 +259,27 @@ a {
     padding: 0;
   }
 }
+
+h2 {
+  text-align: center;
+}
+
+.save-button {
+  background-color: var(--main-accent); /* Material-UI primary color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.3s;
+  outline: none;
+  margin-top: 1.5rem;
+  font-size: 1.3rem;
+}
+
+.save-button:hover {
+  background-color: var(
+    --main-accent-opaque
+  ); /* Slightly darker shade for hover */
+}
