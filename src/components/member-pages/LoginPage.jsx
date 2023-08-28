@@ -58,7 +58,7 @@ const names = [
   "Nate Mathews",
   "Nathan Casazza",
   "Nick Bodenheimer",
-  "Nick Dittermore",
+  "Nick Dittemore",
   "Nick Moreno",
   "Nicolas Rogstad",
   "Nils Ljung",
