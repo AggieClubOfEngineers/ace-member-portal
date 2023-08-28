@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -59,10 +59,12 @@ const OfficerPage = ({ memberId }) => {
   const fetchData = async (memberId) => {
     const eventsRef = collection(db, "events");
     const eventsSnapshot = await getDocs(eventsRef);
-    let eventsData = eventsSnapshot.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
+    let eventsData = eventsSnapshot.docs
+      .map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }))
+      .sort((a, b) => a.start.toDate() - b.start.toDate());
 
     const pointsRef = collection(db, "points");
     const q = query(pointsRef, where("memberId", "==", memberId));
@@ -73,20 +75,31 @@ const OfficerPage = ({ memberId }) => {
     }));
 
     const allPointsRef = collection(db, "points");
-    const q2 = query(allPointsRef, where("memberId", "==", memberId));
-    const allPointsSnapshot = await getDocs(q2);
+    const allPointsSnapshot = await getDocs(allPointsRef);
     let allPointsData = allPointsSnapshot.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
+    }));
+
+    const usersRef = collection(db, "users");
+    const usersSnapshot = await getDocs(usersRef);
+    let usersData = usersSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
     }));
 
     let data = {
       events: eventsData,
       points: pointsData,
       allPoints: allPointsData,
+      users: usersData,
     };
     setData(data);
   };
+
+  useEffect(() => {
+    fetchData(memberId);
+  }, [memberId]);
 
   if (!data.events) {
     fetchData(memberId);
@@ -104,6 +117,8 @@ const OfficerPage = ({ memberId }) => {
       </div>
     );
   }
+
+  console.log(data);
   return (
     <MemberContext.Provider value={{ data, updateData: setData }}>
       <Box
@@ -118,6 +133,7 @@ const OfficerPage = ({ memberId }) => {
       >
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs
+            className="member-tabs"
             value={value}
             onChange={handleChange}
             aria-label="Member Page Tabs"
@@ -144,7 +160,7 @@ const OfficerPage = ({ memberId }) => {
           <CustomTabPanel value={value} index={1}>
             {
               <div>
-                <CalendarTab events={data.events} />
+                <CalendarTab events={data.events} role="officer" />
                 <CalendarEdit />
               </div>
             }

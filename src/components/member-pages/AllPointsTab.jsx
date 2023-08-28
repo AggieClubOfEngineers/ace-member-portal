@@ -26,10 +26,12 @@ const AllPointsTab = () => {
 
   // Group all attendedEvents by category
   const attendedEventsByCategory = pointCategories.map((category) => {
-    const events = attendedEvents.filter(
-      (event) => event.pointType === category
-    );
-    const points = events.reduce((total, event) => total + event.points, 0);
+    const events = data.events.filter((event) => event.pointType === category);
+    const points = events.reduce((total, event) => {
+      // Check if there's a corresponding entry in data.points for this event
+      const attendedEvent = data.points.find((p) => p.eventId === event.id);
+      return total + (attendedEvent ? attendedEvent.points : 0);
+    }, 0);
     return {
       category,
       events,
@@ -39,7 +41,7 @@ const AllPointsTab = () => {
 
   useEffect(() => {
     // Convert data.points to the structure we need
-    const pointsByUserAndEvent = data.points.reduce((acc, event) => {
+    const pointsByUserAndEvent = data.allPoints.reduce((acc, event) => {
       if (!acc[event.memberId]) acc[event.memberId] = {};
       acc[event.memberId][event.eventId] = event.points;
       return acc;
@@ -65,7 +67,10 @@ const AllPointsTab = () => {
 
     for (let memberId in editableData) {
       for (let eventId in editableData[memberId]) {
+        // Check if member or event does not exist in initialData or if the points have changed
         if (
+          !initialData[memberId] ||
+          !initialData[memberId][eventId] ||
           initialData[memberId][eventId] !== editableData[memberId][eventId]
         ) {
           if (!updatedPoints[memberId]) {
@@ -94,6 +99,8 @@ const AllPointsTab = () => {
     setInitialData(editableData);
   };
 
+  console.log(editableData);
+
   return (
     <div className="points-container">
       <h2>My Points</h2>
@@ -112,40 +119,46 @@ const AllPointsTab = () => {
         return (
           <div className="all-points-category-container" key={category}>
             <h3>{category}</h3>
-            <TableContainer>
+            <TableContainer className="scrollable-table">
               <Table>
                 <TableHead>
                   <TableRow>
                     <TableCell>User ID</TableCell>
                     {eventsInCategory.map((event) => (
-                      <TableCell key={event.id}>{event.name}</TableCell>
+                      <TableCell key={event.id} className="wide-cell">
+                        {event.name}
+                      </TableCell>
                     ))}
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {Object.entries(editableData).map(
-                    ([memberId, userPoints]) => (
-                      <TableRow key={memberId}>
-                        <TableCell>{memberId}</TableCell>
-                        {eventsInCategory.map((event) => (
+                  {data.users.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell>{user.name}</TableCell>
+                      {eventsInCategory.map((event) => {
+                        const pointValue =
+                          editableData[user.id] &&
+                          editableData[user.id][event.id]
+                            ? editableData[user.id][event.id]
+                            : "";
+                        return (
                           <TableCell key={event.id}>
                             <TextField
-                              value={userPoints[event.id] || ""}
-                              onChange={(e) =>
-                                handleEdit(e, memberId, event.id)
-                              }
+                              value={pointValue}
+                              onChange={(e) => handleEdit(e, user.id, event.id)}
                             />
                           </TableCell>
-                        ))}
-                      </TableRow>
-                    )
-                  )}
+                        );
+                      })}
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </TableContainer>
           </div>
         );
       })}
+
       <button className="save-button" onClick={handleSave}>
         Save
       </button>

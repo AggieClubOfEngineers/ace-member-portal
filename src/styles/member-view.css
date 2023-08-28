@@ -29,3 +29,18 @@
   font-family: "Roboto Condensed", sans-serif;
   text-shadow: 0 0 1px #c2c2c2, 0 0 0.5px #c2c2c2;
 }
+
+.scrollable-table {
+  overflow-x: auto;
+  max-width: 100%; /* or set any max-width you'd prefer */
+}
+
+.wide-cell {
+  min-width: 70px; /* or any other value you find suitable */
+}
+
+@media (max-width: 768px) {
+  .member-tabs {
+    margin-top: 7vh; /* Or 5vh as you prefer */
+  }
+}

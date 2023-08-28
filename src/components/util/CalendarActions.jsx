@@ -36,23 +36,6 @@ const CalendarActions = () => {
     updateData({ ...data, events: [...data.events, newEvent] });
   };
 
-  const handleDeleteEvent = () => {
-    setOpen(true);
-  };
-
-  const handleDialogClose = () => {
-    setOpen(false);
-  };
-
-  const confirmDeleteEvent = () => {
-    const updatedEvents = data.events.filter(
-      (event) => event.id !== selectedEventId
-    );
-    deleteEvent(selectedEventId);
-    updateData({ ...data, events: updatedEvents });
-    setOpen(false);
-  };
-
   return (
     <div className="calendar-actions-container">
       <Button startIcon={<AddIcon />} onClick={handleAddEvent}>
@@ -63,7 +46,7 @@ const CalendarActions = () => {
         handleClose={handleAddEventDialogClose}
         handleAddEvent={handleAddEventSubmit}
       />
-      <div className="delete-event">
+      {/* <div className="delete-event">
         <Select
           value={selectedEventId}
           onChange={(e) => setSelectedEventId(e.target.value)}
@@ -96,7 +79,7 @@ const CalendarActions = () => {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </div> */}
     </div>
   );
 };

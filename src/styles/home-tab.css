@@ -86,3 +86,16 @@ h2 {
   width: 50px;
   transition: transform 0.3s ease;
 }
+
+@media (max-width: 768px) {
+  .events-container {
+    grid-template-columns: 1fr; /* Display events in a single column on mobile */
+    width: 90vw; /* Adjust the width if necessary */
+  }
+
+  .event-container {
+    margin: 0.5rem auto; /* Center the event container */
+    max-width: none;
+    width: 70%;
+  }
+}

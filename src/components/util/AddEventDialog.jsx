@@ -10,9 +10,7 @@ import {
 } from "@material-ui/core";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
-
 import { Timestamp } from "firebase/firestore";
-import moment from "moment";
 
 const pointTypes = ["Social", "Service", "Family", "Committee", "Meeting"];
 
@@ -58,14 +56,14 @@ const AddEventDialog = ({ open, handleClose, handleAddEvent }) => {
           fullWidth
           onChange={(e) => setLocation(e.target.value)}
         />
-        <Datetime
-          inputProps={{ placeholder: "Start Time" }}
-          onChange={(date) => setStart(moment(date).toDate())}
-        />
-        <Datetime
-          inputProps={{ placeholder: "End Time" }}
-          onChange={(date) => setEnd(moment(date).toDate())}
-        />
+        <div style={{ marginBottom: "20px" }}>
+          <label>Start:</label>
+          <Datetime value={start} onChange={(date) => setStart(date._d)} />
+        </div>
+        <div style={{ marginBottom: "20px" }}>
+          <label>End:</label>
+          <Datetime value={end} onChange={(date) => setEnd(date._d)} />
+        </div>
         <TextField
           select
           label="Point Type"

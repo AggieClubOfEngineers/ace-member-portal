@@ -6,8 +6,8 @@ import "../../styles/member-view.css";
 
 const PrivateView = () => {
   const [member, setMember] = useState({
-    memberId: "",
-    role: "",
+    memberId: "Nick Dittermore",
+    role: "officer",
   });
 
   const renderPage = () => {
@@ -23,7 +23,13 @@ const PrivateView = () => {
 
   return (
     <div style={{ height: "100%" }}>
-      <button id="home-portal-button">Home Page</button>
+      <a
+        className="nav-text"
+        id="home-portal-button"
+        href="https://aggieclubofengineers.org"
+      >
+        HOME PAGE
+      </a>
       {renderPage()}
     </div>
   );

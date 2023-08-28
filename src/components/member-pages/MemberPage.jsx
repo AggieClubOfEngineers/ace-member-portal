@@ -128,7 +128,7 @@ const MemberPage = ({ memberId }) => {
             {<HomeTab />}
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
-            {<CalendarTab events={data.events} />}
+            {<CalendarTab events={data.events} role="member" />}
           </CustomTabPanel>
           <CustomTabPanel value={value} index={2}>
             {<PointsTab />}

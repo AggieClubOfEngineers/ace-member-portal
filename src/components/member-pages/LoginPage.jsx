@@ -58,7 +58,7 @@ const names = [
   "Nate Mathews",
   "Nathan Casazza",
   "Nick Bodenheimer",
-  "Nick Dittemore",
+  "Nick Dittermore",
   "Nick Moreno",
   "Nicolas Rogstad",
   "Nils Ljung",
@@ -83,11 +83,11 @@ import db from "../../config";
 import { getDoc, doc } from "firebase/firestore";
 
 function LoginPage({ setMember }) {
+  const [username, setUsername] = useState(names[0]);
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
   const handleLogin = async (event) => {
-    const username = "john_doe";
     event.preventDefault();
 
     const docRef = doc(db, "users", username);
@@ -112,7 +112,11 @@ function LoginPage({ setMember }) {
       <LockSquare className="login-icon" strokeWidth={0.5} color={"#123456"} />
       <h1 className="login-title">Login</h1>
       <form className="login-form" onSubmit={handleLogin}>
-        <select name="username">
+        <select
+          name="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        >
           {names &&
             names.map((name) => (
               <option value={name} key={name}>

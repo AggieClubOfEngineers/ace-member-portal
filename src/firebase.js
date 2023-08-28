@@ -45,22 +45,23 @@ export async function deleteEvent (eventId) {
 };
 
 export async function updateEvents(eventList) {
-    let batch = writeBatch(db);
-  
-    for (let memberId in eventList) {
-      for (let eventId in eventList[memberId]) {
-        let event = eventList[memberId][eventId];
-        let eventRef = doc(db, 'points', memberId + "_" + eventId);
-  
-        batch.update(eventRef, {
-          memberId: memberId,
-          eventId: eventId,
-          points: event.points,
-          pointType: event.pointType,
-        });
-      }
+  let batch = writeBatch(db);
+
+  for (let memberId in eventList) {
+    for (let eventId in eventList[memberId]) {
+      let event = eventList[memberId][eventId];
+      let eventRef = doc(db, 'points', memberId + "_" + eventId);
+
+      // Use set with merge: true instead of update
+      batch.set(eventRef, {
+        memberId: memberId,
+        eventId: eventId,
+        points: event.points,
+        pointType: event.pointType,
+      }, { merge: true });
     }
-  
-    // Commit the batch
-    await batch.commit();
+  }
+
+  // Commit the batch
+  await batch.commit();
 }

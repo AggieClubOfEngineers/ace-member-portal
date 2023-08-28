@@ -44,3 +44,14 @@
 .all-points-category-container > h3 {
   color: black;
 }
+
+@media (max-width: 480px) {
+  .category-summary {
+    flex-basis: 100%; /* Each summary takes full width */
+    text-align: center; /* Center the content */
+  }
+
+  #summary-container {
+    flex-wrap: wrap;
+  }
+}

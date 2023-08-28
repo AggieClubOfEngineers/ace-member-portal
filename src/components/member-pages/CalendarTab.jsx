@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import {
@@ -6,13 +6,19 @@ import {
   DialogTitle,
   DialogContent,
   DialogContentText,
+  IconButton,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import MemberContext from "../util/MemberContext"; // Update this to your MemberContext path
 
+import { deleteEvent } from "../../firebase";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
 const localizer = momentLocalizer(moment);
 
-const CalendarTab = ({ events }) => {
+const CalendarTab = ({ events, role }) => {
+  const { data, updateData } = useContext(MemberContext);
+
   const [open, setOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
 
@@ -33,6 +39,25 @@ const CalendarTab = ({ events }) => {
     setOpen(false);
   };
 
+  const handleDeleteEvent = () => {
+    // Check if selectedEvent exists and has an id property
+    if (selectedEvent && selectedEvent.id) {
+      const updatedEvents = events.filter(
+        (event) => event.id !== selectedEvent.id
+      );
+
+      // Assuming deleteEvent and updateData are functions that handle backend operations and state updates.
+      deleteEvent(selectedEvent.id);
+      updateData({ ...data, events: updatedEvents });
+
+      // Close the dialog after deleting
+      setOpen(false);
+      setSelectedEvent(null);
+    } else {
+      console.error("No selected event to delete");
+    }
+  };
+
   return (
     <div style={{ height: 500, color: "#123456" }}>
       <Calendar
@@ -45,7 +70,20 @@ const CalendarTab = ({ events }) => {
       />
       {selectedEvent && (
         <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>{selectedEvent.title}</DialogTitle>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <DialogTitle>{selectedEvent.title}</DialogTitle>
+            {role === "officer" && (
+              <IconButton onClick={handleDeleteEvent}>
+                <DeleteIcon />
+              </IconButton>
+            )}
+          </div>
           <DialogContent>
             <DialogContentText>
               Description: {selectedEvent.description} <br />
