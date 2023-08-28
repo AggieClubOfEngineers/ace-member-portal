@@ -45,22 +45,20 @@ const CodeEntry = ({ event }) => {
   };
 
   return (
-    <div>
-      <div className="code-entry-container">
-        <TextField
-          id="outlined-helperText"
-          label="Code"
-          defaultValue=""
-          onChange={(e) => setCode(e.target.value)}
+    <div className="code-entry-container">
+      <TextField
+        id="outlined-helperText"
+        label="Code"
+        defaultValue=""
+        onChange={(e) => setCode(e.target.value)}
+      />
+      <div className="submit-button-container" onClick={submitCode}>
+        <SquareArrowRight
+          className="login-button-icon"
+          strokeWidth={2}
+          color={"black"}
+          size={30}
         />
-        <div className="submit-button-container" onClick={submitCode}>
-          <SquareArrowRight
-            className="login-button-icon"
-            strokeWidth={2}
-            color={"black"}
-            size={30}
-          />
-        </div>
       </div>
       {error && <div>{error}</div>}
     </div>
