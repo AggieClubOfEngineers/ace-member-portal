@@ -63,14 +63,14 @@ const MemberPage = ({ memberId }) => {
     }));
 
     const pointsRef = collection(db, "points");
-    const q = query(pointsRef, where("memberId", "==", memberId));
+    const q = query(pointsRef, where("userId", "==", memberId));
     const pointsSnapshot = await getDocs(q);
     let pointsData = pointsSnapshot.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
     }));
 
-    let data = { events: eventsData, points: pointsData };
+    let data = { events: eventsData, points: pointsData, userId: memberId };
     setData(data);
   };
 
@@ -91,7 +91,7 @@ const MemberPage = ({ memberId }) => {
     );
   }
   return (
-    <MemberContext.Provider value={{ data, updateData: null }}>
+    <MemberContext.Provider value={{ data, updateData: setData }}>
       <Box
         sx={{
           display: "flex",

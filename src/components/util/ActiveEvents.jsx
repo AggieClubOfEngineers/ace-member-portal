@@ -39,7 +39,14 @@ const ActiveEvents = () => {
                 {moment(event.end.toDate()).format("MM/DD HH:mm")}
               </p>
             </div>
-            {event.code && <CodeEntry event={event} />}
+            {event.code && (
+              <CodeEntry
+                event={event}
+                userId={data.userId}
+                data={data}
+                updateData={updateData}
+              />
+            )}
           </div>
         ))}
       </div>

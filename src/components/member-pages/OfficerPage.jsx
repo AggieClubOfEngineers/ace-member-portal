@@ -93,6 +93,7 @@ const OfficerPage = ({ memberId }) => {
       points: pointsData,
       allPoints: allPointsData,
       users: usersData,
+      userId: memberId,
     };
     setData(data);
   };

@@ -25,15 +25,27 @@ const updatePoints = async (userId, pointType, points, eventId) => {
   await batch.commit();
 };
 
-const CodeEntry = ({ event }) => {
+const CodeEntry = ({ event, userId, data, updateData }) => {
   const [code, setCode] = useState("");
   const [error, setError] = useState(null);
 
   const submitCode = async () => {
     if (code === event.code) {
       try {
-        const userId = "john_doe";
         await updatePoints(userId, event.pointType, event.points, event.id);
+
+        // Update local data
+        const updatedPoints = [
+          ...data.points,
+          {
+            userId,
+            eventId: event.id,
+            pointType: event.pointType,
+            points: event.points,
+          },
+        ];
+        updateData({ ...data, points: updatedPoints });
+        console.log(updatedPoints);
         setError(null);
       } catch (err) {
         console.log(err);
