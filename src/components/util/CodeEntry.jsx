@@ -28,8 +28,11 @@ const updatePoints = async (userId, pointType, points, eventId) => {
 const CodeEntry = ({ event, userId, data, updateData }) => {
   const [code, setCode] = useState("");
   const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   const submitCode = async () => {
+    setError(null);
+    setSuccessMessage(null);
     if (code === event.code) {
       try {
         await updatePoints(userId, event.pointType, event.points, event.id);
@@ -46,7 +49,8 @@ const CodeEntry = ({ event, userId, data, updateData }) => {
         ];
         updateData({ ...data, points: updatedPoints });
         console.log(updatedPoints);
-        setError(null);
+        setSuccessMessage("Points updated.");
+        setCode("");
       } catch (err) {
         console.log(err);
         setError("Failed to update points. Please try again.");
@@ -57,22 +61,28 @@ const CodeEntry = ({ event, userId, data, updateData }) => {
   };
 
   return (
-    <div className="code-entry-container">
-      <TextField
-        id="outlined-helperText"
-        label="Code"
-        defaultValue=""
-        onChange={(e) => setCode(e.target.value)}
-      />
-      <div className="submit-button-container" onClick={submitCode}>
-        <SquareArrowRight
-          className="login-button-icon"
-          strokeWidth={2}
-          color={"black"}
-          size={30}
+    <div>
+      <div className="code-entry-container">
+        <TextField
+          id="outlined-helperText"
+          label="Code"
+          defaultValue=""
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
         />
+        <div className="submit-button-container" onClick={submitCode}>
+          <SquareArrowRight
+            className="login-button-icon"
+            strokeWidth={2}
+            color={"black"}
+            size={30}
+          />
+        </div>
       </div>
-      {error && <div>{error}</div>}
+      {successMessage && (
+        <div className="success-message support-message">{successMessage}</div>
+      )}
+      {error && <div className="error-message support-message">{error}</div>}
     </div>
   );
 };
