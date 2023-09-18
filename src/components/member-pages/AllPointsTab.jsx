@@ -13,6 +13,7 @@ import {
 import { updateEvents } from "../../firebase";
 
 import PointsSummary from "../util/PointsSummary";
+import QuickEditPopup from "../util/QuickEditPopup";
 
 const pointCategories = ["Social", "Service", "Family", "Committee", "Meeting"];
 
@@ -21,6 +22,19 @@ const AllPointsTab = () => {
 
   const [editableData, setEditableData] = useState({});
   const [initialData, setInitialData] = useState({});
+
+  const [isQuickEditOpen, setIsQuickEditOpen] = useState(false);
+  const [currentEventPoints, setCurrentEventPoints] = useState(null);
+
+  const openQuickEdit = (event) => {
+    setIsQuickEditOpen(true);
+    setCurrentEventPoints(event);
+  };
+
+  const closeQuickEdit = () => {
+    setIsQuickEditOpen(false);
+    setCurrentEventPoints(null);
+  };
 
   const attendedEvents = data.points;
 
@@ -99,6 +113,27 @@ const AllPointsTab = () => {
     setInitialData(editableData);
   };
 
+  const handleQuickSave = (eventPoints, checkedMembers) => {
+    // 1. Prepare the data structure
+    const updatedPoints = checkedMembers.map((memberId) => ({
+      userId: memberId,
+      eventId: currentEventPoints.id,
+      pointType: currentEventPoints.pointType,
+      points: eventPoints,
+    }));
+
+    updateEvents(updatedPoints);
+
+    // 3. Update local state
+    setInitialData((prevData) => ({
+      ...prevData,
+      points: [...prevData.points, ...updatedPoints],
+    }));
+
+    // Close the Quick Edit modal (if applicable)
+    closeQuickEdit();
+  };
+
   console.log(editableData);
 
   return (
@@ -127,6 +162,9 @@ const AllPointsTab = () => {
                     {eventsInCategory.map((event) => (
                       <TableCell key={event.id} className="wide-cell">
                         {event.name}
+                        {/* <button onClick={() => openQuickEdit(event)}>
+                          Quick Edit
+                        </button> */}
                       </TableCell>
                     ))}
                   </TableRow>
@@ -158,6 +196,15 @@ const AllPointsTab = () => {
           </div>
         );
       })}
+
+      {/* {isQuickEditOpen && (
+        <QuickEditPopup
+          users={data.users}
+          onSave={handleQuickSave}
+          onClose={closeQuickEdit}
+          eventPoints={currentEventPoints.points}
+        />
+      )} */}
 
       <button className="save-button" onClick={handleSave}>
         Save
