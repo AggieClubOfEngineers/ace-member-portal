@@ -93,7 +93,7 @@ const OfficerPage = ({ memberId }) => {
       points: pointsData,
       allPoints: allPointsData,
       users: usersData,
-      userId: memberId,
+      memberId: memberId,
     };
     setData(data);
   };
@@ -119,7 +119,6 @@ const OfficerPage = ({ memberId }) => {
     );
   }
 
-  console.log(data);
   return (
     <MemberContext.Provider value={{ data, updateData: setData }}>
       <Box

@@ -114,27 +114,40 @@ const AllPointsTab = () => {
   };
 
   const handleQuickSave = (eventPoints, checkedMembers) => {
-    // 1. Prepare the data structure
-    const updatedPoints = checkedMembers.map((memberId) => ({
-      userId: memberId,
-      eventId: currentEventPoints.id,
-      pointType: currentEventPoints.pointType,
-      points: eventPoints,
-    }));
+    const updatedPoints = {};
+
+    checkedMembers.forEach((memberId) => {
+      if (!updatedPoints[memberId]) {
+        updatedPoints[memberId] = {};
+      }
+      updatedPoints[memberId][currentEventPoints.id] = {
+        points: eventPoints,
+        pointType: currentEventPoints.pointType,
+      };
+    });
 
     updateEvents(updatedPoints);
 
-    // 3. Update local state
-    setInitialData((prevData) => ({
-      ...prevData,
-      points: [...prevData.points, ...updatedPoints],
-    }));
+    // Update local state
+    setInitialData((prevData) => {
+      // Clone the prevData object to avoid mutating the state directly
+      let newData = { ...prevData };
+
+      for (let memberId in updatedPoints) {
+        if (!newData[memberId]) {
+          newData[memberId] = {};
+        }
+        for (let eventId in updatedPoints[memberId]) {
+          newData[memberId][eventId] = updatedPoints[memberId][eventId].points;
+        }
+      }
+
+      return newData;
+    });
 
     // Close the Quick Edit modal (if applicable)
     closeQuickEdit();
   };
-
-  console.log(editableData);
 
   return (
     <div className="points-container">
@@ -197,7 +210,8 @@ const AllPointsTab = () => {
         );
       })}
 
-      {/* {isQuickEditOpen && (
+      {/* {isQuickEditOpen && <div className="overlay"></div>}
+      {isQuickEditOpen && (
         <QuickEditPopup
           users={data.users}
           onSave={handleQuickSave}

@@ -7,8 +7,8 @@ import db from "../../config";
 
 import { doc, getDoc, writeBatch } from "firebase/firestore";
 
-const updatePoints = async (userId, pointType, points, eventId) => {
-  const attendanceRef = doc(db, "points", `${userId}_${eventId}`);
+const updatePoints = async (memberId, pointType, points, eventId) => {
+  const attendanceRef = doc(db, "points", `${memberId}_${eventId}`);
 
   // Check if the user has already been credited points for this event
   const attendanceSnap = await getDoc(attendanceRef);
@@ -19,13 +19,13 @@ const updatePoints = async (userId, pointType, points, eventId) => {
   // Start a batch
   const batch = writeBatch(db);
 
-  batch.set(attendanceRef, { userId, eventId, pointType, points });
+  batch.set(attendanceRef, { memberId, eventId, pointType, points });
 
   // Commit the batch
   await batch.commit();
 };
 
-const CodeEntry = ({ event, userId, data, updateData }) => {
+const CodeEntry = ({ event, memberId, data, updateData }) => {
   const [code, setCode] = useState("");
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
@@ -35,20 +35,19 @@ const CodeEntry = ({ event, userId, data, updateData }) => {
     setSuccessMessage(null);
     if (code === event.code) {
       try {
-        await updatePoints(userId, event.pointType, event.points, event.id);
+        await updatePoints(memberId, event.pointType, event.points, event.id);
 
         // Update local data
         const updatedPoints = [
           ...data.points,
           {
-            userId,
+            memberId,
             eventId: event.id,
             pointType: event.pointType,
             points: event.points,
           },
         ];
         updateData({ ...data, points: updatedPoints });
-        console.log(updatedPoints);
         setSuccessMessage("Points updated.");
         setCode("");
       } catch (err) {

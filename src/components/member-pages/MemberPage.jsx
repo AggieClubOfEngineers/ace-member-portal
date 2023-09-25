@@ -63,14 +63,14 @@ const MemberPage = ({ memberId }) => {
     }));
 
     const pointsRef = collection(db, "points");
-    const q = query(pointsRef, where("userId", "==", memberId));
+    const q = query(pointsRef, where("memberId", "==", memberId));
     const pointsSnapshot = await getDocs(q);
     let pointsData = pointsSnapshot.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
     }));
 
-    let data = { events: eventsData, points: pointsData, userId: memberId };
+    let data = { events: eventsData, points: pointsData, memberId: memberId };
     setData(data);
   };
 

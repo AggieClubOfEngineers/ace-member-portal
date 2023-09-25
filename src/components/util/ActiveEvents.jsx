@@ -42,7 +42,7 @@ const ActiveEvents = () => {
             {event.code && (
               <CodeEntry
                 event={event}
-                userId={data.userId}
+                memberId={data.memberId}
                 data={data}
                 updateData={updateData}
               />

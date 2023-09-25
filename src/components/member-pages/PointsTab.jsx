@@ -35,8 +35,6 @@ const PointsTab = () => {
     };
   });
 
-  console.log(attendedEventsByCategory);
-
   // Create a map of attended events for easier lookup
   const attendedEventsMap = attendedEvents.reduce((map, event) => {
     map[event.eventId] = event.points;
